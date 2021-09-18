@@ -1,0 +1,7 @@
+{
+    "board": "esp32:esp32:pico32",
+    "configuration": "UploadSpeed=460800,DebugLevel=warn",
+    "sketch": "flower_main_mqtt.ino",
+    "output": "../build",
+    "port": "/dev/cu.SLAB_USBtoUART"
+}

@@ -1,0 +1,49 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "/Users/weedcuper/Documents/Arduino/flower_main_mqtt/",
+                "/Users/weedcuper/Documents/Arduino/libraries/async-mqtt-client-master/src/*",
+                "/Users/weedcuper/Documents/Arduino/libraries/AsyncTCP-master/src/",
+                "/Users/weedcuper/Documents/Arduino/libraries/ESP32-IRremote/",
+                "/Users/weedcuper/Documents/Arduino/libraries/Adafruit_NeoPixel/*",
+                "/Users/weedcuper/Documents/Arduino/libraries/DHTesp-master/",
+                "/Users/weedcuper/Documents/Arduino/libraries/pubsubclient-master/src/",
+                "/Users/weedcuper/Documents/Arduino/libraries/NTPClient-master/",
+                "/Users/weedcuper/Documents/Arduino/libraries/OneWire-2.3.5/",
+                "/Users/weedcuper/Documents/Arduino/libraries/Time-master/",
+                "/Users/weedcuper/Documents/Arduino/libraries/rc-switch-master/",
+                "/Users/weedcuper/Library/Arduino15/packages/esp32/tools/**",
+                "/Users/weedcuper/Library/Arduino15/packages/esp32/hardware/esp32/1.0.3/**",
+                "/Users/weedcuper/Library/Arduino15/packages/esp32/hardware/esp32/1.0.3/libraries/Ticker/src",
+                "/Applications/Arduino.app/Contents/Java/libraries",
+                "/Applications/Arduino.app/Contents/Java/hardware/tools/avr/avr/include",
+                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/variants/standard"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "/Users/weedcuper/Documents/Arduino/libraries/pubsubclient-master/src/",
+                    "/Users/weedcuper/Documents/Arduino/flower_main_mqtt/",
+                    "/Users/weedcuper/Documents/Arduino/libraries/**",
+                    "/Users/weedcuper/Documents/Arduino/libraries/NTPClient-master/",
+                    "/Applications/Arduino.app/Contents/Java/"
+                ]
+            },
+            "forcedInclude": [
+                "/Applications/Arduino.app/Contents/Java/hardware/arduino/avr/cores/arduino/Arduino.h"
+            ],
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "defines": [ "USBCON" ]
+        }
+    ],
+    "version": 4
+}
