@@ -17,6 +17,8 @@ class Sensors
     void get_temperature(float *temp);
     void get_temperature(char *buf);
     void routine();
+    void temp_handler(const char *data);
+    void hum_handler(const char *data);
     SENSORS_STATUS test();
 };
 

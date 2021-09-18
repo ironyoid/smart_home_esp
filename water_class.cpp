@@ -1,6 +1,6 @@
 #include "water_class.h"
 #include "time_class.h"
-#define DEBUG
+//#define DEBUG
 Water::Water(uint8_t adc_1_pin, uint8_t adc_2_pin, uint8_t adc_pallet_pin, uint8_t pump_up_pin, uint8_t pump_down_pin,
              uint8_t pump_access_pin, uint16_t adc_1_tresh, uint16_t adc_2_tresh, uint16_t adc_pallet_tresh)
 {

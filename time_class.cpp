@@ -1,5 +1,5 @@
 #include "time_class.h"
-#define DEBUG
+//#define DEBUG
 uint16_t Time_t::year;
 uint8_t Time_t::month;
 uint8_t Time_t::day;

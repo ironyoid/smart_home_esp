@@ -1,5 +1,6 @@
 #ifndef DEFINES_H
 #define DEFINES_H
+#include <Adafruit_NeoPixel.h>
 #include <IRremoteInt.h>
 #include <IRremote.h>
 #include <DHTesp.h>
@@ -15,6 +16,9 @@
 #include "EEPROM.h"
 #include "nvs_flash.h"
 #include "nvs.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/timers.h"
+
 /*Тут у нас UART для ардуины*/
 #define EX_UART_NUM       UART_NUM_2 
 #define BUF_SIZE_U        (1024 * 2)
@@ -28,7 +32,9 @@
 #define ADC_PIN2          35  // Датчик потока у цветка
 #define PUMP_UP           25  // Воду качаем наверх
 #define PUMP_DOWN         26  // Воду качаем вниз (зеленый провод)
-#define RF_PIN            21
+#define RF_PIN            21  // Пин радио передатчика
+#define LED_LENTA_PIN     16  // Пин светодиодной ленты
+#define IR_PIN            13  // Пин IR передатчика
 
 #define PALLETE_ADC        32   // датчик в поддоне 
 #define LAMP_ON_TIME      1080 // 7.25
@@ -47,14 +53,15 @@
 #define BUF_TIME          1800
 #define MLITERS           70000
 #define MLITERS_TEST      3500
-//#define WATERING_PERIOD 60
+#define LED_LENTA_COUNT   370  
+#define LED_LENTA_BRIGHT  150
 #define PUMP_ADC1_TRESH   1000
 #define PUMP_ADC2_TRESH   400
 #define PALLETE_TRESH     3000
-#define IR_PIN 13           // IR transmmit pin is here
-#define MQTT_IP           "192.168.0.10" 
+#define MQTT_IP           "192.168.0.100" 
 #define MQTT_ID           "SmartHome"
 #define MQTT_PORT         1883
+
 typedef enum
 {
     PUMP_NO_WATER,
@@ -82,11 +89,29 @@ typedef enum
     SENSORS_ERR
 } SENSORS_STATUS;
 
+typedef enum {
+  eLED_MODE_REG,
+  eLED_MODE_RAINBOW,
+  eLED_MODE_FILLER,
+  eLED_MODE_COLOR_CYCLE,
+  eLED_MODE_RUNNING_DOTS,
+  eLED_MODE_LAST
+}led_lenta_mode_t;
+
 struct Schedule
 {
     uint16_t minutes;
     uint32_t mliters; // Сколько воды льем, по факту это просто задержка
 };
+typedef struct
+{
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t brightness;
+    led_lenta_mode_t mode;
+} led_lenta_t;
+
 extern nvs_handle my_handle;
 
 #endif

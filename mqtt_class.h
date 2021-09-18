@@ -1,29 +1,36 @@
-  #ifndef MQTT_H
-  #define MQTT_H
-  #include "defines.h"
-  #include <PubSubClient.h>
+#ifndef MQTT_H
+#define MQTT_H
+#include "defines.h"
+#include "AsyncMqttClient.h"
+#include "AsyncTCP.h"
+
 class MQTT
 {
     private:
-    static WiFiClient wifi_client;
-    static PubSubClient client;
+    static AsyncMqttClient mqttClient;
     static char *id;
     static char *ip;
     static uint16_t port;
     static char tx_buf[256];
     static uint8_t tx_buf_length;
-    static void rx_callback(char* topic, byte* payload, unsigned int length);
+    static TimerHandle_t mqttReconnectTimer;
+    static TimerHandle_t wifiReconnectTimer;
+    static void WiFiEvent(WiFiEvent_t event);
+    static void timersInit(void);
+    static void connectToMqtt(void);
+    static void connectToWiFi(void);
+    static void onMqttConnect(bool sessionPresent);
+    static void onMqttDisconnect(AsyncMqttClientDisconnectReason reason);
+    static void onMqttSubscribe(uint16_t packetId, uint8_t qos);
+    static void onMqttUnsubscribe(uint16_t packetId);
+    static void onMqttMessage(char* topic, char* payload, AsyncMqttClientMessageProperties properties, 
+                              size_t len, size_t index, size_t total);
     MQTT() {};
     public:
-    static void initialize(char *ip, char *id, uint16_t port);
-    static void add(uint8_t data);
-    static void add(uint16_t data);
-    static void add(float data);
-    static void add(char *data, uint8_t len);
-    static void add(uint8_t *data, uint8_t len);
-    static void connect(const char *topic);
-    static uint8_t send(const char *data, uint8_t length, const char *topic);
-    static uint8_t send(uint8_t data, const char *topic);
+    static uint16_t Publish(const char *topic, const char *data);
+    static void Init(void (*callback)(char*, char*, 
+                AsyncMqttClientMessageProperties, size_t, size_t, size_t));
+    static void onMqttPublish(uint16_t packetId);                          
 };
 
 #endif

@@ -1,5 +1,5 @@
 #include "sensors_class.h"
-#define DEBUG
+//#define DEBUG
 Sensors::Sensors(uint8_t pin, DHTesp::DHT_MODEL_t type)
 {
     dht.setup(pin, type);

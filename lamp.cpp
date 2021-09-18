@@ -90,7 +90,7 @@ if ((Time_t::get_day_of_week() > 0) && (Time_t::get_day_of_week()< 6))
 
 void WirelessLamp::routine()
 {
-    if ((external_state == 1) && (tx_flag == 0) && (internal_state == 1))
+    if ((external_state == 1) && (tx_flag == 0))
     {
         ESP_ERROR_CHECK(uart_disable_rx_intr(EX_UART_NUM));
         mySwitch.send(5584140, 24); //on
@@ -98,7 +98,7 @@ void WirelessLamp::routine()
         tx_flag = 1;
         real_state = 1;
     }
-    else if((external_state == 0) && (tx_flag == 1) && (internal_state == 1))
+    else if((external_state == 0) && (tx_flag == 1))
     {
         ESP_ERROR_CHECK(uart_disable_rx_intr(EX_UART_NUM));
         mySwitch.send(5584320, 24); //off
