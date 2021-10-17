@@ -23,7 +23,7 @@ void MQTT::WiFiEvent(WiFiEvent_t event)
         Serial.println("IP address: ");
         Serial.println(WiFi.localIP());
         connectToMqtt();
-        Time_t::initialize(4, 10080);
+        Time_t::initialize(4, 10800);
         break;
     case SYSTEM_EVENT_STA_DISCONNECTED:
         Serial.println("WiFi lost connection");
@@ -58,8 +58,11 @@ void MQTT::onMqttConnect(bool sessionPresent) {
   Serial.println(sessionPresent);
   mqttClient.subscribe("/smart_home/wireless_lamp/to/", 0);
   mqttClient.subscribe("/smart_home/ir_lamp/to/", 0);
-  mqttClient.subscribe("/smart_home/wire_lamp/to/", 0);
+  mqttClient.subscribe("/smart_home/wire_lamp/ex_state/to/", 0);
+  mqttClient.subscribe("/smart_home/wire_lamp/time/to/", 0);
   mqttClient.subscribe("/smart_home/led_lenta/to/", 0);
+  mqttClient.subscribe("/smart_home/music/to/", 0);
+  mqttClient.subscribe("/smart_home/water_schd/to/", 0);
 //   Serial.print("Subscribing at QoS 0, packetId: ");
 //   Serial.println(packetIdSub);
 //   mqttClient.publish("test/lol", 0, true, "test 1");

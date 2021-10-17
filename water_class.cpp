@@ -14,7 +14,39 @@ Water::Water(uint8_t adc_1_pin, uint8_t adc_2_pin, uint8_t adc_pallet_pin, uint8
     this->adc_2_tresh = adc_2_tresh;
     this->adc_pallet_tresh = adc_pallet_tresh;
     this->test_mliters = 0;
-    memset(water_schedule, 0, sizeof(Schedule) * 4);
+
+}
+
+void Water::init(void)
+{
+    uint8_t first_flag = 0;
+
+    nvs_open("storage", NVS_READWRITE, &my_handle);
+    nvs_get_u8(my_handle, "first_flag", &first_flag);
+    Serial.printf("first_flag %d\n", first_flag);
+    if (first_flag != 0x55)
+    {
+        Serial.printf("flash is empty \n");
+        nvs_set_u8(my_handle, "first_flag", 0x55);
+        water_schedule[0].minutes = 4140; // Wednesday 21:00
+        water_schedule[0].mliters = 70000;
+        water_schedule[1].minutes = 7860; // Saturday 11:00
+        water_schedule[1].mliters = 70000;
+        water_schedule[2].minutes = 0;
+        water_schedule[2].mliters = 0;
+        water_schedule[3].minutes = 0;
+        water_schedule[3].mliters = 0;
+        nvs_set_blob(my_handle, "water_schd", water_schedule, sizeof(water_schedule));
+    }
+    else
+    {
+        size_t len = sizeof(water_schedule);
+        ESP_ERROR_CHECK_WITHOUT_ABORT(nvs_get_blob(my_handle, "water_schd", &water_schedule, &len));
+        Serial.printf("water_schd size: %d\n", len);
+    }
+    nvs_commit(my_handle);
+    nvs_close(my_handle);
+
     water_flag = 0;
     pinMode(pump_access_pin, OUTPUT);
     pinMode(pump_up_pin, OUTPUT);
@@ -25,8 +57,7 @@ Water::Water(uint8_t adc_1_pin, uint8_t adc_2_pin, uint8_t adc_pallet_pin, uint8
     digitalWrite(pump_access_pin, HIGH);
     digitalWrite(pump_up_pin, LOW);
     digitalWrite(pump_down_pin, LOW);
-    water_tester();
-
+    //water_tester();
 }
 
 void Water::routine()
@@ -39,6 +70,7 @@ void Water::routine()
     uint32_t mliters = 0;
     for(uint8_t i = 0; i < 4; i++)
     {
+        Serial.printf("%d %d %d \n", i, water_schedule[i].minutes, water_schedule[i].mliters);
         if((week_minutes == water_schedule[i].minutes) && (water_schedule[i].mliters != 0))
         {
             shedule_minutes = water_schedule[i].minutes;
@@ -46,6 +78,7 @@ void Water::routine()
             break;
         }
     }
+    Serial.printf("\n");
     if(!shedule_minutes)
     {
         water_flag = 0;
@@ -229,20 +262,25 @@ uint32_t Water::analog_read_fit(uint8_t ch, uint8_t par)
     return mes / par;
 }
 
-void Water::set_mliters(Schedule *water_schedule)
+void Water::set_mliters(const char *str)
 {
-    this->water_schedule[0] = water_schedule[0];
-    this->water_schedule[1] = water_schedule[1];
-    this->water_schedule[2] = water_schedule[2];
-    this->water_schedule[3] = water_schedule[3];
+    sscanf(str, "%d,%d;%d,%d;%d,%d;%d,%d;", &water_schedule[0].minutes, &water_schedule[0].mliters,
+                                            &water_schedule[1].minutes, &water_schedule[1].mliters, 
+                                            &water_schedule[2].minutes, &water_schedule[2].mliters,
+                                            &water_schedule[3].minutes, &water_schedule[3].mliters);
+
+    nvs_open("storage", NVS_READWRITE, &my_handle);
+    nvs_set_blob(my_handle, "water_schd", water_schedule, sizeof(water_schedule));
+    nvs_commit(my_handle);
+    nvs_close(my_handle);
 }
 
-void Water::get_mliters(Schedule *water_schedule)
+void Water::get_mliters(char *str)
 {
-    water_schedule[0] = this->water_schedule[0];
-    water_schedule[1] = this->water_schedule[1];
-    water_schedule[2] = this->water_schedule[2];
-    water_schedule[3] = this->water_schedule[3];
+    sprintf(str, "%d,%d;%d,%d;%d,%d;%d,%d;", water_schedule[0].minutes, water_schedule[0].mliters,
+                                             water_schedule[1].minutes, water_schedule[1].mliters, 
+                                             water_schedule[2].minutes, water_schedule[2].mliters,
+                                             water_schedule[3].minutes, water_schedule[3].mliters);
 }
 
 void Water::set_test_mliters(uint32_t mliters)

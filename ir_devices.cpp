@@ -37,9 +37,10 @@ String IrDevices::get_topic()
 {
     if(real_state)
     {
-        for(uint8_t i = 0; i < 3; i++)
+        //for(uint8_t i = 0; i < 3; i++)
         {
-            ir_lamp.sendNEC(0x1FE48B7, 32); 
+            //Serial.printf("IR Turn OFF\n");
+            ir_lamp.sendNEC(0x5ED9768, 32); 
         }
         real_state = 0;
     }
@@ -49,9 +50,10 @@ String IrDevices::get_topic()
 {
     if(!real_state)
     {
-        for(uint8_t i = 0; i < 3; i++)
+        //for(uint8_t i = 0; i < 3; i++)
         {
-            ir_lamp.sendNEC(0x1FE48B7, 32); 
+            //Serial.printf("IR Turn ON\n");
+            ir_lamp.sendNEC(0x5ED9768, 32); 
         }
         real_state = 1;
     }
@@ -61,7 +63,7 @@ String IrDevices::get_topic()
 {
     if(real_state)
     {
-        for(uint8_t i = 0; i < 3; i++)
+        //for(uint8_t i = 0; i < 3; i++)
         {
             ir_lamp.sendNEC(0xFF85EA15, 32); 
         }
@@ -73,7 +75,7 @@ String IrDevices::get_topic()
 {
     if(!real_state)
     {
-        for(uint8_t i = 0; i < 3; i++)
+        //for(uint8_t i = 0; i < 3; i++)
         {
             ir_lamp.sendNEC(0xFF85EA15, 32); 
         }

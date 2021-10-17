@@ -46,12 +46,13 @@ class Water
     Water(uint8_t adc_1_pin, uint8_t adc_2_pin, uint8_t adc_pallet_pin, uint8_t pump_up_pin, uint8_t pump_down_pin, 
     uint8_t pump_access_pin, uint16_t adc_1_tresh, uint16_t adc_2_tresh, uint16_t adc_pallet_tresh);
     //PUMP_STATUS pump_whater_up();
+    void init(void);
     CONTAINER_STATUS water_tester();
     CONTAINER_STATUS get_container_state();
     PUMP_STATUS get_pump_state();
     uint8_t is_pallet_full();
-    void get_mliters(Schedule *water_schedule);
-    void set_mliters(Schedule *water_schedule);
+    void get_mliters(char *str);
+    void set_mliters(const char *str);
     void set_test_mliters(uint32_t mliters);
     uint16_t get_deadtime();
     void set_deadtime(uint16_t deadtime);

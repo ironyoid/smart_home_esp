@@ -36,7 +36,7 @@
 #define LED_LENTA_PIN     16  // Пин светодиодной ленты
 #define IR_PIN            13  // Пин IR передатчика
 
-#define PALLETE_ADC        32   // датчик в поддоне 
+#define PALLETE_ADC       32   // датчик в поддоне 
 #define LAMP_ON_TIME      1080 // 7.25
 #define LAMP_OFF_TIME     1260 //21.00
 #define LAMP_ON_TIME_WKN  1080 // 10.00

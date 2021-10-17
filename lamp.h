@@ -5,10 +5,10 @@
 class Lamp
 {
     protected:
-            uint16_t lamp_on_time;
-            uint16_t lamp_off_time;
-            uint16_t lamp_on_time_wkn;
-            uint16_t lamp_off_time_wkn;
+            uint32_t lamp_on_time;
+            uint32_t lamp_off_time;
+            uint32_t lamp_on_time_wkn;
+            uint32_t lamp_off_time_wkn;
             uint8_t internal_state;
             uint8_t external_state;
             uint8_t real_state;
@@ -18,6 +18,7 @@ class Lamp
             void set_external_state(uint8_t state);
             char get_real_state();
             char get_external_state();
+            void Init(void);
 
     protected:
     Lamp(uint8_t m_pin, uint16_t lp_on, uint16_t lp_off, 
@@ -31,6 +32,8 @@ class WireLamp : public Lamp
 
     public:
     void routine();
+    void get_time(char *str);
+    void set_time(const char *str);
     WireLamp(uint8_t m_pin, uint16_t lp_on, uint16_t lp_off, 
             uint16_t lp_on_wkn, uint16_t lp_off_wkn, uint8_t m_internal_state, uint8_t m_external_state) 
             : Lamp(m_pin, lp_on, lp_off, lp_on_wkn, lp_off_wkn, m_internal_state, m_external_state) {}

@@ -25,6 +25,17 @@ Lamp::Lamp(uint8_t m_pin, uint16_t lp_on, uint16_t lp_off, uint8_t m_internal_st
     pinMode(pin, OUTPUT);
 }
 
+void Lamp::Init(void)
+{
+    nvs_open("storage", NVS_READWRITE, &my_handle);
+    nvs_get_u32(my_handle, "time_on", &lamp_on_time);
+    nvs_get_u32(my_handle, "time_off", &lamp_off_time);
+    nvs_get_u32(my_handle, "time_on_wkn", &lamp_on_time_wkn);
+    nvs_get_u32(my_handle, "time_off_wkn", &lamp_off_time_wkn);
+    nvs_commit(my_handle);
+    nvs_close(my_handle);
+}
+
 WirelessLamp::WirelessLamp(uint8_t m_pin, uint16_t lp_on, uint16_t lp_off,
                            uint16_t lp_on_wkn, uint16_t lp_off_wkn, uint8_t m_internal_state, uint8_t m_external_state)
     : Lamp(m_pin, lp_on, lp_off, lp_on_wkn, lp_off_wkn, m_internal_state, m_external_state)
@@ -49,12 +60,18 @@ void WireLamp::routine()
     Serial.print(lamp_on_time);
     Serial.print("  lamp_off_time: ");
     Serial.print(lamp_off_time); 
+    Serial.print("lamp_on_time_wkn: ");
+    Serial.print(lamp_on_time_wkn);
+    Serial.print("  lamp_off_time_wkn: ");
+    Serial.print(lamp_off_time_wkn); 
     Serial.print("  internal_state: ");
     Serial.print(internal_state); 
     Serial.print("  external_state: ");
-    Serial.println(external_state); 
+    Serial.print(external_state); 
+    Serial.print("  day minutes: ");
+    Serial.println(Time_t::get_day_minutes()); 
 #endif
-if ((Time_t::get_day_of_week() > 0) && (Time_t::get_day_of_week()< 6))
+if ((Time_t::get_day_of_week() > 0) && (Time_t::get_day_of_week() < 6))
   {
     if ((Time_t::get_day_minutes() > lamp_on_time) && (Time_t::get_day_minutes() < lamp_off_time))
     {
@@ -62,6 +79,7 @@ if ((Time_t::get_day_of_week() > 0) && (Time_t::get_day_of_week()< 6))
     }
     else
     {
+      Serial.println("TURN OFF 1");   
       internal_state = 0;
     }
   }
@@ -73,6 +91,7 @@ if ((Time_t::get_day_of_week() > 0) && (Time_t::get_day_of_week()< 6))
     }
     else
     {
+        Serial.println("TURN OFF 2");  
         internal_state = 0;
     }
   }
@@ -112,14 +131,32 @@ void Lamp::set_external_state(uint8_t state)
 {
     if ((state == 0) || (state == 1))
     {
-        external_state = state;
+        Serial.printf("TURN OFF 3 EX %d", state);   
+        this->external_state = state;
     }
 }
 char Lamp::get_external_state()
 {
-    return '0' + external_state;
+    return '0' + this->external_state;
 }
 char Lamp::get_real_state()
 {
-    return '0' + real_state;
+    return '0' + this->real_state;
+}
+
+void WireLamp::get_time(char *str)
+{
+    sprintf(str, "%d,%d;%d,%d;", lamp_on_time, lamp_off_time, lamp_on_time_wkn, lamp_off_time_wkn);
+}
+
+void WireLamp::set_time(const char *str)
+{
+    sscanf(str, "%d,%d;%d,%d", &lamp_on_time, &lamp_off_time, &lamp_on_time_wkn, &lamp_off_time_wkn);
+    nvs_open("storage", NVS_READWRITE, &my_handle);
+    nvs_set_u32(my_handle, "time_on", lamp_on_time);
+    nvs_set_u32(my_handle, "time_off", lamp_off_time);
+    nvs_set_u32(my_handle, "time_on_wkn", lamp_on_time_wkn);
+    nvs_set_u32(my_handle, "time_off_wkn", lamp_off_time_wkn);
+    nvs_commit(my_handle);
+    nvs_close(my_handle);
 }
